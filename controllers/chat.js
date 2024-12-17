@@ -140,3 +140,26 @@ exports.postMessage = async(req, res, next) => {
         next(err);
     }
 }
+
+exports.updateMessage = async(req, res, next) => {
+    const id = req.body.id;
+    let content = req.body.message;
+    try {
+        const message = await Message.findById(id);
+        if (!message) {
+            const error = new Error('Could not find message.');
+            error.statusCode = 404;
+            throw error;
+        }
+        message.content = content;
+        await message.save();
+        res.status(201).json({
+            message
+        });
+    } catch (err) {
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err);
+    }
+}

@@ -15,8 +15,8 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
   }));
   
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/chat', chatRoutes);
 app.use('/auth', authRoutes);
