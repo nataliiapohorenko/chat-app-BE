@@ -7,13 +7,16 @@ const authRoutes = require('./routes/auth');
 
 const app = express();
 
-app.use(express.json());
+
 
 app.use(cors({
-    origin: '*', 
-    methods: ['OPTIONS', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE'], 
-    allowedHeaders: ['Content-Type', 'Authorization'] 
-}));
+    origin: '*',
+    methods: ['OPTIONS', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
+  }));
+  
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
 
 app.use('/chat', chatRoutes);
 app.use('/auth', authRoutes);

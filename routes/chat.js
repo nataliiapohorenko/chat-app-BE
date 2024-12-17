@@ -11,4 +11,8 @@ router.post('/chat', chatController.createChat);
 
 router.post('/message', chatController.postMessage);
 
+router.put('/chat', chatController.updateChat);
+
+router.delete('/chat', chatController.deleteChat);
+
 module.exports = router;
