@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+require('dotenv').config();
 
 const chatRoutes = require('./routes/chat');
 const authRoutes = require('./routes/auth');
@@ -30,15 +31,9 @@ app.use((error, req, res, next) => {
 });
 
 mongoose
-    .connect(
-        'mongodb+srv://natalo4ka:UX1T9esO4S9q3cBA@cluster0.qdfxh.mongodb.net/chat?retryWrites=true&w=majority&appName=Cluster0'
-    )
+    .connect(process.env.MONGO_URI)
     .then(result => {
-        const server = app.listen(8080);
-        // const io = require('./socket').init(server);
-        // io.on('connection', socket => {
-        //     console.log('Client connected');
-        // });
+        const server = app.listen(process.env.PORT || 8080);
     })
     .catch(err => console.log(err));
 
