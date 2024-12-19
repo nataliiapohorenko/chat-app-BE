@@ -104,7 +104,7 @@ exports.postMessage = async(req, res, next) => {
     const chatId = req.body.id;
     let content = req.body.message;
     try{
-        const {message, response, updateNotification} = createMessage(chatId, content);
+        const {message, response, updateNotification} = await createMessage(chatId, content);
         res.status(201).json({
             message, response, updateNotification
         });
