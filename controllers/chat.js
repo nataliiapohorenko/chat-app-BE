@@ -7,8 +7,9 @@ const { fetchData } = require('../services/apiService');
 const {createChat, createMessage} = require('../utils/chatUtil')
 
 exports.getChats = async (req, res, next) => {
+    const { email } = req.user;
     try {
-        const chats = await Chat.find();
+        const chats = await Chat.find({createdBy: email});
         res.json({
             chats: chats
         });
