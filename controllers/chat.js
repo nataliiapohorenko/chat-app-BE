@@ -4,6 +4,8 @@ const Chat = require('../models/chat');
 const Message = require('../models/message');
 const { fetchData } = require('../services/apiService');
 
+const {createChat, createMessage} = require('../utils/chatUtil')
+
 exports.getChats = async (req, res, next) => {
     try {
         const chats = await Chat.find();
@@ -34,14 +36,11 @@ exports.getChat = async (req, res, next) => {
 };
 
 exports.createChat = async (req, res, next) => {
+    const createdBy = req.user.email;
     const botName = req.body.firstName;
     const botSurname = req.body.lastName;
-    const chat = new Chat({
-        botName,
-        botSurname
-    });
     try {
-        await chat.save();
+        const chat = await createChat(createdBy, botName, botSurname);
         res.status(201).json({
             chat
         });
@@ -102,34 +101,9 @@ exports.deleteChat = async (req, res, next) => {
 
 exports.postMessage = async(req, res, next) => {
     const chatId = req.body.id;
-    let sender = 'user';
     let content = req.body.message;
-    let timestamp = new Date().toISOString();
-    const message = new Message({
-        chatId,
-        sender,
-        content,
-        timestamp
-    })
     try{
-        await message.save();
-        const data = await fetchData('/random');
-        sender = 'bot';
-        content = data[0].q;
-        timestamp = new Date().toISOString();
-        const response = new Message({
-            chatId,
-            sender,
-            content,
-            timestamp
-        });
-        await response.save();
-        const chat = await Chat.findById(chatId);
-        chat.lastMessage.sender = sender;
-        chat.lastMessage.content = content;
-        chat.lastMessage.timestamp = timestamp;
-        await chat.save();
-        const updateNotification = timestamp;
+        const {message, response, updateNotification} = createMessage(chatId, content);
         res.status(201).json({
             message, response, updateNotification
         });

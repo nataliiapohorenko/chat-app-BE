@@ -1,11 +1,10 @@
 const mongoose = require('mongoose');
 
 const ChatSchema = new mongoose.Schema({
-    // createdBy: { 
-    //     type: mongoose.Schema.Types.ObjectId, 
-    //     ref: 'User', 
-    //     required: true 
-    // },
+    createdBy: { 
+        type: String, 
+        required: true 
+    },
     botName: { 
         type: String, 
         required: true 

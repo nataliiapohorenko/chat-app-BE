@@ -6,9 +6,17 @@ require('dotenv').config();
 const chatRoutes = require('./routes/chat');
 const authRoutes = require('./routes/auth');
 
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+// Handle Uncaught Exceptions
+process.on('uncaughtException', (error) => {
+    console.error('Uncaught Exception thrown:', error);
+    process.exit(1);
+});
+
 const app = express();
-
-
 
 app.use(cors({
     origin: '*',
@@ -18,6 +26,10 @@ app.use(cors({
   
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use('/healthcheck' , (req, res, next) => {
+    res.send('Server is running fine!');
+})
 
 app.use('/chat', chatRoutes);
 app.use('/auth', authRoutes);
